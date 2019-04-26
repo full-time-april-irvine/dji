@@ -706,6 +706,8 @@ ol {
 	width: 33.33%;
 	float: left;
 	position: relative;
+	border: 2px solid rgb(255, 255, 255); 
+	border-radius: 10px;
 }
 
 .gallery-item .hover-links {

@@ -1,0 +1,28 @@
+sudo vim /etc/systemd/system/dji.service
+
+[Unit]
+Description=Gunicorn instance to serve dji
+After=network.target
+[Service]
+User=jake
+Group=www-data
+WorkingDirectory=/home/jake/dji
+Environment="PATH=/home/jake/dji/venv/bin"
+ExecStart=/home/jake/dji/venv/bin/gunicorn --workers 3 --bind unix:dji.sock -m 007 wsgi:application
+[Install]
+WantedBy=multi-user.target
+
+sudo systemctl start dji
+sudo systemctl enable dji
+
+
+server {
+    listen 80;
+    server_name 18.216.201.181;
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/home/jake/dji/dji.sock;
+    }
+}
+
+sudo ln -s /etc/nginx/sites-available/dji /etc/nginx/sites-enabled
